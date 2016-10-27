@@ -25,6 +25,8 @@ namespace Test
     {
         private KeyboardListener KListener;
         private MouseListener MListener;
+        private Task always_move_task = null;
+        private bool running_flag = false;
 
         private int x = 0;
         private int y = 0;
@@ -45,6 +47,38 @@ namespace Test
         }
         void KListener_KeyDown(object sender, RawKeyEventArgs args)
         {
+            if (args.Key == Key.A)
+            {
+                if (running_flag == false)
+                {
+                    running_flag = true;
+
+                    always_move_task = Task.Factory.StartNew(() =>
+                    {
+                        Console.WriteLine("task start!...");
+
+                        while (running_flag)
+                        {
+                            System.Threading.Thread.Sleep(1000);
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                Random rd = new Random();
+                                x += 2;
+                                y += 2;
+                                x = rd.Next(54433);
+                                y = rd.Next(9800);
+                                InputGenerator.SendMove(x, y);
+                            }));
+                        }
+                        Console.WriteLine("task stop!...");
+                    });
+                    //always_move_task.Start();
+                }
+                else
+                {
+                    running_flag = false;
+                }
+            }
             this.Dispatcher.Invoke((Action)(() =>
             {
                 x += 2;
