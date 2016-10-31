@@ -63,10 +63,8 @@ namespace Test
                             this.Dispatcher.Invoke((Action)(() =>
                             {
                                 Random rd = new Random();
-                                x += 2;
-                                y += 2;
                                 x = rd.Next(54433);
-                                y = rd.Next(9800);
+                                y = rd.Next(65535);
                                 InputGenerator.SendMove(x, y);
                             }));
                         }
